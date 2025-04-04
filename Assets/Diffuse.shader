@@ -55,7 +55,7 @@ Shader "Custom/Diffuse"
             float4 frag (v2f i) : SV_Target
             {
               i.normal = normalize(i.normal);
-              float3 lightDir = normalize(float3(1,1,0));
+              float3 lightDir = normalize(float3(1,2,0));
               float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
               
               float3 reflectDir = reflect(-lightDir, i.normal);
@@ -64,8 +64,8 @@ Shader "Custom/Diffuse"
 
               float diffuse = (1.0 + dot(lightDir, i.normal)) / 2.0;
 
-              float3 kWarm = _Warm.rgb + _Alpha * _Albedo.rgb;
-              float3 kCool = _Cold.rgb + _Beta * _Albedo.rgb;
+              float3 kWarm = _Warm.rgb * _Alpha + _Albedo.rgb;
+              float3 kCool = _Cold.rgb * _Beta + _Albedo.rgb;
 
               float3 gooch = (diffuse * kWarm) + ((1 - diffuse) * kCool);
               return float4(gooch + specular, 1.0);
