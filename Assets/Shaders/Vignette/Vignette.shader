@@ -2,7 +2,7 @@ Shader "Custom/Vignette"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+      _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -17,6 +17,9 @@ Shader "Custom/Vignette"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
+            float3 _VignetteColor;
+            float _VignetteIntensity, _VignetteSmoothness, _VignetteRoundness;
+            float2 _VignetteSize;
 
             struct VertexData
             {
@@ -34,13 +37,24 @@ Shader "Custom/Vignette"
             {
               v2f o;
               o.vertex = UnityObjectToClipPos(v.vertex);
-              o.uv = o.uv;
+              o.uv = v.uv;
               return o;
             }
 
             float4 frag (v2f i) : SV_Target
             {
-              return float4(1,1,1,1);
+              float4 col = tex2D(_MainTex, i.uv);
+
+              float2 pos = i.uv - 0.5;
+              pos *= _VignetteSize;
+              pos += 0.5;
+
+              float2 d = abs(pos - float2(0.5, 0.5)) * _VignetteIntensity;
+              d = pow(saturate(d), _VignetteRoundness);
+
+              float t = pow(saturate(1.0 - dot(d, d)), _VignetteSmoothness);
+
+              return float4(lerp(_VignetteColor, col.rgb, t), 1.0);
             }
             ENDCG
         }
