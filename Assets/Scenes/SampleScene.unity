@@ -322,6 +322,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shader: {fileID: 4800000, guid: cf648779ce113dc428a75204f8f9affe, type: 3}
+  color: {r: 0.16037738, g: 0.018912425, b: 0.018912425, a: 0}
+  intensity: 1.4
+  smoothness: 1
+  roundness: 1
+  size: {x: 1, y: 1}
 --- !u!1 &1935540483
 GameObject:
   m_ObjectHideFlags: 0
